@@ -1,0 +1,9 @@
+.divider {
+  border-image: linear-gradient(
+      to right,
+      rgb(255, 82, 82),
+      rgb(255, 253, 108),
+      rgb(10, 157, 255)
+    )
+    0.5;
+}
