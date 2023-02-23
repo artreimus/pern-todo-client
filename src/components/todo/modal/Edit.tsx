@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import DatePicker from 'react-datepicker';
 import { ToDo } from '../List';
 import { FiEdit } from 'react-icons/fi';
 import { AiFillEdit } from 'react-icons/ai';
+import 'react-datepicker/dist/react-datepicker.css';
 
 type ToDoModalEditProps = {
   setTodos: (value: ToDo[] | ((prev: ToDo[]) => ToDo[])) => void;
@@ -15,8 +17,12 @@ const ToDoModalEdit: React.FC<ToDoModalEditProps & ToDo> = ({
   setTodos,
   setShow,
   show,
+  completed,
 }) => {
   const [editDescription, setEditDescription] = useState(description);
+  const [dueDate, setDueDate] = useState<null | Date>(null);
+
+  if (dueDate) console.log(dueDate);
 
   useEffect(() => {
     if (!show) {
@@ -31,7 +37,11 @@ const ToDoModalEdit: React.FC<ToDoModalEditProps & ToDo> = ({
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ description: editDescription }),
+        body: JSON.stringify({
+          description: editDescription,
+          completed,
+          due_date: dueDate,
+        }),
       });
 
       if (!res.ok) {
@@ -88,7 +98,7 @@ const ToDoModalEdit: React.FC<ToDoModalEditProps & ToDo> = ({
                         </p>
                       </div>
                     </div>
-                    <div className="mb-4">
+                    <div className="mb-1">
                       <label
                         className="text-gray-800 text-sm font-bold mb-1"
                         htmlFor="description"
@@ -103,7 +113,18 @@ const ToDoModalEdit: React.FC<ToDoModalEditProps & ToDo> = ({
                         onChange={(e) => setEditDescription(e.target.value)}
                       />
                     </div>
-                    <div className="text-center mt-4 md:flex justify-center">
+                    <div className="mb-4">
+                      <p className="text-gray-800 text-sm font-bold mb-1">
+                        Date
+                      </p>
+                      <DatePicker
+                        selected={dueDate}
+                        onChange={(date: Date) => setDueDate(date)}
+                        className="border w-full text-gray-800 text-sm px-3 py-2"
+                      />
+                    </div>
+
+                    <div className="text-center md:flex justify-center">
                       <button
                         className="block w-full md:inline-block md:w-auto px-4 py-3 md:py-2 bg-green-200 text-green-700 rounded-lg font-semibold text-sm md:ml-2 md:order-2"
                         onClick={handleEdit}
