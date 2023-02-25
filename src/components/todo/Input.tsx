@@ -35,11 +35,9 @@ const ToDoInput: React.FC<ToDoInputProps> = ({ todos, setTodos }) => {
     }
   };
 
-  console.log(todos);
-
   return (
     <form className="col-span-2" onSubmit={handleSubmit}>
-      <div className="relative border-2 border-solid border border-black rounded">
+      <div className="relative border-2 border-solid border-black rounded">
         <input
           type="text"
           placeholder="New list name"

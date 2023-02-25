@@ -1,9 +1,7 @@
 import React from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 
-type inputProps = {};
-
-const NavListInput: React.FC<inputProps> = () => {
+const NavListInput: React.FC = () => {
   return (
     <form>
       <div className="relative border-2 border-solid border border-black rounded mt-0">

@@ -6,12 +6,11 @@ import { AiFillApple } from 'react-icons/ai';
 import { Inter } from '@next/font/google';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import NavList from './list';
+import Logo from '../logo';
 
 const inter = Inter({ subsets: ['latin'] });
 
-type NavProps = {};
-
-const Nav: React.FC<NavProps> = () => {
+const Nav: React.FC = () => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -19,12 +18,13 @@ const Nav: React.FC<NavProps> = () => {
       className={`flex flex-col bg-white${inter.className} mb-2 sm:max-w-xs`}
     >
       <div className="flex items-center justify-between px-5 pt-3 pb-2 sm:pt-6">
-        <div className="flex items-center justify-center">
+        {/* <div className="flex items-center justify-center">
           <h1 className="font-bold text-5xl tracking-wide">iDo</h1>
           <div className="text-5xl">
             <AiFillApple />
           </div>
-        </div>
+        </div> */}
+        <Logo />
         <button
           className="text-3xl sm:hidden"
           onClick={() => setOpen((prev) => !prev)}
