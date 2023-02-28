@@ -1,8 +1,12 @@
 import Head from 'next/head';
-import ToDoList from '@/components/todo/List';
-import Nav from '@/components/nav';
+import Logo from '@/components/logo';
+import { useRouter } from 'next/router';
+import useAuth from '@/hooks/useAuth';
 
 export default function Home() {
+  const router = useRouter();
+  const { auth } = useAuth();
+
   return (
     <>
       <Head>
@@ -12,13 +16,35 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <>
-        <div className="grid grid-cols-1 sm:grid-cols-200">
-          <Nav />
-          <main>
+        <div className="flex justify-center items-center flex-col h-screen">
+          <div className="mb-5">
+            <Logo />
+          </div>
+          {auth.accessToken ? (
             <div>
-              <ToDoList />
+              <button
+                className="border px-6 py-3"
+                onClick={() => router.push('/lists')}
+              >
+                Go to App
+              </button>
             </div>
-          </main>
+          ) : (
+            <div>
+              <button
+                className="border mr-5 px-6 py-3"
+                onClick={() => router.push('/auth/login')}
+              >
+                Login
+              </button>
+              <button
+                className="border px-6 py-3"
+                onClick={() => router.push('/auth/register')}
+              >
+                Register
+              </button>
+            </div>
+          )}
         </div>
       </>
     </>
