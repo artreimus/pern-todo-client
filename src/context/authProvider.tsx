@@ -1,5 +1,4 @@
-import useRefreshToken from '@/hooks/useRefreshToken';
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useState } from 'react';
 
 type AuthProviderProps = { children?: JSX.Element | JSX.Element[] };
 
@@ -18,8 +17,6 @@ const AuthContext = createContext({});
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
   const [auth, setAuth] = useState({});
-
-  const refresh = useRefreshToken();
 
   const value = { auth, setAuth };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
