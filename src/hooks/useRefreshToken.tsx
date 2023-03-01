@@ -1,9 +1,12 @@
 import useAuth from './useAuth';
 import axios from '../api/axios';
 import { ContextValueType } from '@/context/authProvider';
+import setErrorModal from '@/utils/setErrorModal';
+import useModal from './useModal';
 
 const useRefreshToken = () => {
   const { setAuth }: ContextValueType = useAuth();
+  const { setError } = useModal();
 
   const refresh = async () => {
     try {
@@ -21,7 +24,7 @@ const useRefreshToken = () => {
 
       return response.data.accessToken;
     } catch (error) {
-      console.error('refresh', error);
+      setError(setErrorModal(error));
     }
   };
   return refresh;

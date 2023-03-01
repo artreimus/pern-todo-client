@@ -4,6 +4,9 @@ import Logo from '@/components/logo';
 import useAuth from '@/hooks/useAuth';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import useModal from '@/hooks/useModal';
+import setErrorModal from '@/utils/setErrorModal';
+import setSuccessModal from '@/utils/setSuccessModal';
 
 type TextInput = { email: string; password: string };
 
@@ -17,7 +20,14 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ title }) => {
     password: '',
   });
 
+  const route =
+    title === 'register'
+      ? { route: 'Login', message: 'Already have an account?' }
+      : { route: 'Register', message: 'Dont have an account yet? ' };
+
   const { setAuth } = useAuth();
+
+  const { setSuccess, setError } = useModal();
   const router = useRouter();
 
   const onTextChange = (
@@ -47,9 +57,10 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ title }) => {
       const { accessToken, user_id }: any = response;
       const { email } = textInputs;
       setAuth({ email, accessToken, user_id });
+      setSuccess(setSuccessModal(`${title} successful`));
       router.push('/lists');
     } catch (error) {
-      console.error('handleSubmit', error);
+      setError(setErrorModal(error));
     }
   };
 
@@ -59,6 +70,7 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ title }) => {
       JSON.stringify({ email, password }),
       { headers: { 'Content-Type': 'application/json' }, withCredentials: true }
     );
+
     return response?.data;
   };
 
@@ -71,6 +83,7 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ title }) => {
         withCredentials: false,
       }
     );
+
     return response?.data;
   };
 
@@ -125,6 +138,19 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ title }) => {
             </button>
           </div>
         </form>
+        <div className="mt-2 text-center">
+          <p>
+            {route.message}{' '}
+            <span>
+              <Link
+                href={`/auth/${route.route.toLowerCase()}`}
+                className="font-bold"
+              >
+                {route.route}
+              </Link>
+            </span>
+          </p>
+        </div>
       </div>
     </div>
   );

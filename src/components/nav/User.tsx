@@ -1,5 +1,8 @@
 import axios from '@/api/axios';
 import useAuth from '@/hooks/useAuth';
+import useModal from '@/hooks/useModal';
+import setErrorModal from '@/utils/setErrorModal';
+import setSuccessModal from '@/utils/setSuccessModal';
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -10,15 +13,17 @@ type NavUserProps = {
 const NavUser: React.FC<NavUserProps> = ({ email }) => {
   const router = useRouter();
   const { setAuth } = useAuth();
+  const { setSuccess, setError } = useModal();
   const handleLogout = async () => {
     try {
       const response = await axios.get('auth/logout', {
         withCredentials: true,
       });
       setAuth({});
+      setSuccess(setSuccessModal('Logout successful'));
       router.push('/');
     } catch (error) {
-      console.error('handleLogout', error);
+      setError(setErrorModal(error));
     }
   };
 
