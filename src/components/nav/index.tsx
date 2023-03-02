@@ -9,22 +9,25 @@ import Logo from '../logo';
 import NavUser from './User';
 import useAuth from '@/hooks/useAuth';
 import NavAuth from './Auth';
+import useModal from '@/hooks/useModal';
 
 const inter = Inter({ subsets: ['latin'] });
 
 const Nav: React.FC = () => {
-  const [open, setOpen] = useState(false);
   const { auth } = useAuth();
+  const { navOpen: open, setNavOpen: setOpen } = useModal();
 
   return (
     <nav
       className={`flex flex-col bg-white${inter.className} mb-2 sm:max-w-xs`}
     >
       <div className="flex items-center justify-between px-5 pt-3 pb-2 sm:pt-6">
-        <Logo />
+        <Link href="/">
+          <Logo />
+        </Link>
         <button
           className="text-3xl sm:hidden"
-          onClick={() => setOpen((prev) => !prev)}
+          onClick={() => setOpen((prev: boolean) => !prev)}
         >
           <GiHamburgerMenu />
         </button>
@@ -42,7 +45,7 @@ const Nav: React.FC = () => {
         </div>
         <div className="flex flex-col font-semibold text-lg items-center w-11/12 m-auto">
           <Link
-            href="/tasks"
+            href="/lists"
             className="bg-red-500 py-3 px-5 rounded-sm mb-3 w-full flex items-center"
           >
             <div className="mr-4">
@@ -51,7 +54,7 @@ const Nav: React.FC = () => {
             Tasks
           </Link>
           <Link
-            href="/my-day"
+            href="#"
             className="bg-amber-200 py-3 px-5 rounded-sm mb-3 w-full flex items-center"
           >
             <div className="mr-4 text-xl">
@@ -60,7 +63,7 @@ const Nav: React.FC = () => {
             My Day
           </Link>
           <Link
-            href="/my-week"
+            href="#"
             className="bg-sky-400 py-3 px-5 rounded-sm mb-3 w-full flex items-center"
           >
             <div className="mr-4">

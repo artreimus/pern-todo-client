@@ -7,8 +7,8 @@ const ErrorModal: React.FC = () => {
 
   return (
     <div className="relative">
-      <div className="absolute top-5 right-3 text-white w-screen max-w-sm bg-red-400 rounded-md shadow-lg p-4 ml-auto">
-        <div className="w-full flex">
+      <div className="absolute top-5 right-3 text-white w-3/4 max-w-sm bg-red-400 rounded-md shadow-lg p-4 ml-auto">
+        <div className="w-full  flex">
           <div className="md:flex items-center flex-col justify-center">
             <div className="mr-5 tracking-wider">
               <p className="font-normal text-lg break-all">
