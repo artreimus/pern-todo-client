@@ -3,7 +3,6 @@ import axios from 'axios';
 
 const setErrorModal = (error: unknown) => {
   if (axios.isAxiosError(error) && error.response) {
-    console.log('axios error');
     return {
       show: true,
       message: error?.response?.data?.message,
