@@ -1,9 +1,13 @@
 import React from 'react';
-import { ToDo } from '../List';
+import { ToDoType } from '../List';
 import { BsExclamationTriangle, BsTrash } from 'react-icons/bs';
+import { axiosPrivate } from '@/api/axios';
+import setErrorModal from '@/utils/setErrorModal';
+import useModal from '@/hooks/useModal';
+import setSuccessModal from '@/utils/setSuccessModal';
 
 type ToDoModalDeleteProps = {
-  setTodos: (value: ToDo[] | ((prev: ToDo[]) => ToDo[])) => void;
+  setTodos: (value: ToDoType[] | ((prev: ToDoType[]) => ToDoType[])) => void;
   setShow: (value: boolean | ((prev: boolean) => boolean)) => void;
   show: boolean;
   todo_id: number;
@@ -15,19 +19,21 @@ const ToDoModalDelete: React.FC<ToDoModalDeleteProps> = ({
   setShow,
   show,
 }) => {
+  const { setError, setSuccess } = useModal();
+
   const handleDelete = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/api/v1/todos/${todo_id}`, {
-        method: 'DELETE',
-      });
+      const response = await axiosPrivate.delete(`todos/${todo_id}`);
 
-      if (!res.ok) {
-        throw new Error('An error was encountered while deleting the to do');
-      }
-
-      setTodos((prev) => prev.filter((item: ToDo) => item.todo_id != todo_id));
+      setTodos((prev) =>
+        prev.filter((item: ToDoType) => {
+          return item.todo_id != todo_id;
+        })
+      );
+      setShow(false);
+      setSuccess(setSuccessModal('Todo deleted'));
     } catch (error) {
-      console.error('handleDelete', error);
+      setError(setErrorModal(error));
     }
   };
 

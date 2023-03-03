@@ -1,28 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
-import { ToDo } from '../List';
+import { ToDoType } from '../List';
 import { FiEdit } from 'react-icons/fi';
 import { AiFillEdit } from 'react-icons/ai';
 import 'react-datepicker/dist/react-datepicker.css';
+import useAxiosPrivate from '@/hooks/useAxiosPrivate';
+import setErrorModal from '@/utils/setErrorModal';
+import useModal from '@/hooks/useModal';
+import setSuccessModal from '@/utils/setSuccessModal';
 
 type ToDoModalEditProps = {
-  setTodos: (value: ToDo[] | ((prev: ToDo[]) => ToDo[])) => void;
+  setTodos: (value: ToDoType[] | ((prev: ToDoType[]) => ToDoType[])) => void;
   setShow: (value: boolean | ((prev: boolean) => boolean)) => void;
   show: boolean;
 };
 
-const ToDoModalEdit: React.FC<ToDoModalEditProps & ToDo> = ({
+const ToDoModalEdit: React.FC<ToDoModalEditProps & ToDoType> = ({
   description,
   todo_id,
   setTodos,
   setShow,
   show,
   completed,
+  due_date,
 }) => {
   const [editDescription, setEditDescription] = useState(description);
-  const [dueDate, setDueDate] = useState<null | Date>(null);
+  const [dueDate, setDueDate] = useState<null | Date>(
+    due_date ? new Date(due_date) : null
+  );
 
-  if (dueDate) console.log(dueDate);
+  const { setError, setSuccess } = useModal();
+
+  const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
     if (!show) {
@@ -32,36 +41,28 @@ const ToDoModalEdit: React.FC<ToDoModalEditProps & ToDo> = ({
 
   const handleEdit = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/api/v1/todos/${todo_id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      const response = await axiosPrivate.patch(
+        `todos/${todo_id}`,
+        JSON.stringify({
           description: editDescription,
           completed,
           due_date: dueDate,
-        }),
-      });
-
-      if (!res.ok) {
-        throw new Error('An error was encountered while updating the to do');
-      }
-
-      const result = await res.json();
+        })
+      );
 
       setTodos((prev) =>
-        prev.map((item: ToDo) => {
+        prev.map((item: ToDoType) => {
           if (item.todo_id != todo_id) {
             return item;
           }
-          return result.data[0];
+          return response?.data?.data[0];
         })
       );
 
       setShow(false);
+      setSuccess(setSuccessModal('Todo edited'));
     } catch (error) {
-      console.error('handleDelete', error);
+      setError(setErrorModal(error));
     }
   };
 
@@ -119,7 +120,15 @@ const ToDoModalEdit: React.FC<ToDoModalEditProps & ToDo> = ({
                       </p>
                       <DatePicker
                         selected={dueDate}
-                        onChange={(date: Date) => setDueDate(date)}
+                        onSelect={(date: Date) =>
+                          setDueDate((prev) => {
+                            if (prev?.getTime() === date.getTime()) {
+                              return null;
+                            }
+                            return date;
+                          })
+                        }
+                        onChange={() => {}}
                         className="border w-full text-gray-800 text-sm px-3 py-2"
                       />
                     </div>

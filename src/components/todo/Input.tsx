@@ -1,55 +1,105 @@
-import React, { useState } from 'react';
-import { AiOutlinePlus } from 'react-icons/ai';
-import { ToDo } from './List';
+import React, { useState, FunctionComponent } from 'react';
+import { AiOutlineCalendar, AiOutlinePlus } from 'react-icons/ai';
+import { ToDoType } from './List';
+import DatePicker from 'react-datepicker';
+
+import 'react-datepicker/dist/react-datepicker.css';
+import useAxiosPrivate from '@/hooks/useAxiosPrivate';
+import setErrorModal from '@/utils/setErrorModal';
+import useModal from '@/hooks/useModal';
 
 type ToDoInputProps = {
-  todos: ToDo[];
-  setTodos: (value: ToDo[] | ((prev: ToDo[]) => ToDo[])) => void;
+  setTodos: (value: ToDoType[] | ((prev: ToDoType[]) => ToDoType[])) => void;
+  list_id: number | null;
 };
 
-const ToDoInput: React.FC<ToDoInputProps> = ({ todos, setTodos }) => {
+const ToDoInput: React.FC<ToDoInputProps> = ({ setTodos, list_id }) => {
   const [description, setDescription] = useState('');
+  const [dueDate, setDueDate] = useState<null | Date>(null);
+
+  const { setError } = useModal();
+
+  const axiosPrivate = useAxiosPrivate();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      if (!description) {
-        throw new Error('Please provide description');
+      if (!description || !list_id) {
+        throw new Error('Please provide all required fields');
       }
 
-      const response = await fetch('http://localhost:5000/api/v1/todos', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ description }),
-      });
+      const response = await axiosPrivate.post(
+        'todos',
+        JSON.stringify({ description, list_id, due_date: dueDate })
+      );
 
-      if (!response.ok) {
-        throw new Error('An error was encountered while deleting the to do');
-      }
-
-      const result = await response.json();
-
-      setTodos((prev) => [...prev, result.data]);
+      setTodos((prev) => [...prev, response.data.data]);
+      setDescription('');
+      setDueDate(null);
     } catch (error) {
-      console.error('handleSubmit', error);
+      setError(setErrorModal(error));
     }
   };
 
+  const ReactDatePickerInput = React.forwardRef<
+    HTMLInputElement,
+    React.DetailedHTMLProps<
+      React.InputHTMLAttributes<HTMLInputElement>,
+      HTMLInputElement
+    >
+  >((props, ref) => (
+    <input
+      ref={ref}
+      {...props}
+      id="date-picker"
+      className="bg-transparent hidden"
+    />
+  ));
+
+  ReactDatePickerInput.displayName = 'ReactDatePickerInput';
+
   return (
     <form className="col-span-2" onSubmit={handleSubmit}>
-      <div className="relative border-2 border-solid border-black rounded">
-        <input
-          type="text"
-          placeholder="New list name"
-          value={description}
-          onChange={(e) => {
-            setDescription(e.target.value);
-          }}
-          className="h-5 py-5 pl-3 mr-10 w-11/12 focus:outline-none bg-transparent"
-        />
-        <button className="text-xl absolute bottom-2.5 right-3" type="submit">
-          <AiOutlinePlus />
-        </button>
+      <div className="border-2 border-solid border-black rounded flex flex-col py-2">
+        <div className="flex relative">
+          <div className="w-full mr-5">
+            <input
+              type="text"
+              placeholder="New list name"
+              value={description}
+              onChange={(e) => {
+                setDescription(e.target.value);
+              }}
+              className="h-5 pt-1 pb-2 pl-3  w-full focus:outline-none bg-transparent"
+            />
+          </div>
+          <div className="flex items-center text-xl ml-auto mr-5">
+            <DatePicker
+              selected={dueDate}
+              onSelect={(date: Date) =>
+                setDueDate((prev) => {
+                  if (prev?.getTime() === date.getTime()) {
+                    return null;
+                  }
+                  return date;
+                })
+              }
+              onChange={() => {}}
+              customInput={<ReactDatePickerInput />}
+            ></DatePicker>
+            <label htmlFor="date-picker" className="text-lg mr-4">
+              <AiOutlineCalendar />
+            </label>
+            <button type="submit">
+              <AiOutlinePlus />
+            </button>
+          </div>
+        </div>
+        {dueDate && (
+          <div className="text-xs pl-3 font-semibold">
+            {dueDate.toDateString()}
+          </div>
+        )}
       </div>
     </form>
   );
