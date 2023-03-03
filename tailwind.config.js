@@ -14,6 +14,9 @@ module.exports = {
       gridTemplateColumns: {
         200: '275px 1fr',
       },
+      fontSize: {
+        xxs: '0.6rem',
+      },
     },
     minHeight: {
       '4/5': '75%',

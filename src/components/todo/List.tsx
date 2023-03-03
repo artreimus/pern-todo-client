@@ -2,26 +2,21 @@ import React, { useEffect, useState } from 'react';
 import Todo from '.';
 import ToDoInput from './Input';
 
-export type ToDo = {
+export type ToDoType = {
   todo_id: number;
+  list_id: number;
   description: string;
   completed: boolean;
-  due_date?: string;
+  due_date?: string | null;
 };
 
-const ToDoList: React.FC = () => {
-  const [todos, setTodos] = useState<ToDo[]>([]);
+type TodoListProps = {
+  list_id: number | null;
+  todos: ToDoType[];
+  setTodos: (value: ToDoType[] | ((prev: ToDoType[]) => ToDoType[])) => void;
+};
 
-  async function getTodos() {
-    const res = await fetch('http://localhost:5000/api/v1/todos');
-    const data = await res.json();
-    setTodos(data.data);
-  }
-
-  useEffect(() => {
-    getTodos();
-  }, []);
-
+const ToDoList: React.FC<TodoListProps> = ({ list_id, todos, setTodos }) => {
   return (
     <div
       className={`list sm:mt-10 sm:rounded-tl-3xl sm:px-5 py-2 sm:py-5 sm:ml-3`}
@@ -39,14 +34,24 @@ const ToDoList: React.FC = () => {
         {todos?.map((todo) => (
           <Todo
             key={todo.todo_id}
+            list_id={todo.list_id}
             todo_id={todo.todo_id}
             description={todo.description}
-            setTodos={setTodos}
             completed={todo.completed}
-            due_date={todo.due_date}
+            due_date={
+              todo.due_date
+                ? new Date(todo.due_date).toLocaleDateString('en-US', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })
+                : null
+            }
+            setTodos={setTodos}
           />
         ))}
-        <ToDoInput todos={todos} setTodos={setTodos} />
+        <ToDoInput setTodos={setTodos} list_id={list_id} />
       </div>
     </div>
   );
