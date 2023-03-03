@@ -2,10 +2,13 @@ import Head from 'next/head';
 import Logo from '@/components/logo';
 import { useRouter } from 'next/router';
 import useAuth from '@/hooks/useAuth';
+import useCloseModalsOnRouteChange from '@/hooks/useCloseModalsOnRoute';
 
 export default function Home() {
   const router = useRouter();
   const { auth } = useAuth();
+
+  useCloseModalsOnRouteChange();
 
   return (
     <>
