@@ -13,11 +13,11 @@ const useCloseModalsOnRouteChange = () => {
       setNavOpen(!navOpen);
     }
 
-    if (success.show) {
+    if (success?.show) {
       setSuccess({ show: false, message: '' });
     }
 
-    if (error.show) {
+    if (error?.show) {
       setError({ show: false, message: '' });
     }
   }, [router.asPath]);

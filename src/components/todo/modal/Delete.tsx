@@ -1,5 +1,5 @@
 import React from 'react';
-import { ToDoType } from '../List';
+import { ToDoType } from '../list';
 import { BsExclamationTriangle, BsTrash } from 'react-icons/bs';
 import { axiosPrivate } from '@/api/axios';
 import setErrorModal from '@/utils/setErrorModal';
@@ -23,8 +23,7 @@ const ToDoModalDelete: React.FC<ToDoModalDeleteProps> = ({
 
   const handleDelete = async () => {
     try {
-      const response = await axiosPrivate.delete(`todos/${todo_id}`);
-
+      await axiosPrivate.delete(`todos/${todo_id}`);
       setTodos((prev) =>
         prev.filter((item: ToDoType) => {
           return item.todo_id != todo_id;

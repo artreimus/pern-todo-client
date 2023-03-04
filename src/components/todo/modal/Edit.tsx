@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
-import { ToDoType } from '../List';
+import { ToDoType } from '../list';
 import { FiEdit } from 'react-icons/fi';
 import { AiFillEdit } from 'react-icons/ai';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -46,7 +46,14 @@ const ToDoModalEdit: React.FC<ToDoModalEditProps & ToDoType> = ({
         JSON.stringify({
           description: editDescription,
           completed,
-          due_date: dueDate,
+          due_date: dueDate
+            ? new Date(dueDate).toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })
+            : dueDate,
         })
       );
 

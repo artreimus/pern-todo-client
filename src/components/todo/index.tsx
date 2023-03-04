@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ToDoType } from './List';
+import { ToDoType } from './list';
 import ToDoModalEdit from './modal/Edit';
 import { v4 as uuidv4 } from 'uuid';
 import ToDoModalDelete from './modal/Delete';
@@ -87,16 +87,3 @@ const Todo: React.FC<TodoProps & ToDoType> = ({
   );
 };
 export default Todo;
-
-// {
-//   due_date && (
-//     <div className="text-xs pl-3 font-semibold">
-//       {new Date(due_date).toLocaleDateString('en-US', {
-//         weekday: 'long',
-//         year: 'numeric',
-//         month: 'long',
-//         day: 'numeric',
-//       })}
-//     </div>
-//   );
-// }

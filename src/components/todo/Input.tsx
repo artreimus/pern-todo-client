@@ -1,6 +1,6 @@
 import React, { useState, FunctionComponent } from 'react';
 import { AiOutlineCalendar, AiOutlinePlus } from 'react-icons/ai';
-import { ToDoType } from './List';
+import { ToDoType } from './list';
 import DatePicker from 'react-datepicker';
 
 import 'react-datepicker/dist/react-datepicker.css';
@@ -23,6 +23,7 @@ const ToDoInput: React.FC<ToDoInputProps> = ({ setTodos, list_id }) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     try {
       if (!description || !list_id) {
         throw new Error('Please provide all required fields');
@@ -30,7 +31,18 @@ const ToDoInput: React.FC<ToDoInputProps> = ({ setTodos, list_id }) => {
 
       const response = await axiosPrivate.post(
         'todos',
-        JSON.stringify({ description, list_id, due_date: dueDate })
+        JSON.stringify({
+          description,
+          list_id,
+          due_date: dueDate
+            ? new Date(dueDate).toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })
+            : dueDate,
+        })
       );
 
       setTodos((prev) => [...prev, response.data.data]);
