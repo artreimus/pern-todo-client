@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import AuthModal from '@/components/auth/modal';
 import Nav from '@/components/nav';
-import ToDoList, { ToDoType } from '@/components/todo/List';
+import ToDoList, { ToDoType } from '@/components/todo/list';
 import useAxiosPrivate from '@/hooks/useAxiosPrivate';
 import useAuth from '@/hooks/useAuth';
 import useModal from '@/hooks/useModal';
 import setErrorModal from '@/utils/setErrorModal';
 import { ListType } from '@/components/nav/list';
 import useCloseModalsOnRouteChange from '@/hooks/useCloseModalsOnRoute';
+import useSortTodos from '@/hooks/useSortTodos';
 
 const UserList: React.FC = () => {
   const [todos, setTodos] = useState<ToDoType[]>([]);
@@ -17,6 +18,7 @@ const UserList: React.FC = () => {
   const { setError } = useModal();
 
   useCloseModalsOnRouteChange();
+  useSortTodos(setTodos, todos);
 
   useEffect(() => {
     const fetchAllTodos = async () => {
