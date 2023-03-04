@@ -54,7 +54,7 @@ const Nav: React.FC = () => {
             Tasks
           </Link>
           <Link
-            href="#"
+            href="/lists/day"
             className="bg-amber-200 py-3 px-5 rounded-sm mb-3 w-full flex items-center"
           >
             <div className="mr-4 text-xl">
@@ -63,7 +63,7 @@ const Nav: React.FC = () => {
             My Day
           </Link>
           <Link
-            href="#"
+            href="/lists/week"
             className="bg-sky-400 py-3 px-5 rounded-sm mb-3 w-full flex items-center"
           >
             <div className="mr-4">
