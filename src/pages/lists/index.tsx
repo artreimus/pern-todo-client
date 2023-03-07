@@ -9,6 +9,9 @@ import setErrorModal from '@/utils/setErrorModal';
 import { ListType } from '@/components/nav/list';
 import useCloseModalsOnRouteChange from '@/hooks/useCloseModalsOnRoute';
 import useSortTodos from '@/hooks/useSortTodos';
+import SkeletonListLoader from '@/components/skeleton/ListLoader';
+import useSkeleton from '@/hooks/useSkeleton';
+import useEndSkeletonLoaderOnRouteChange from '@/hooks/useEndSkeletonLoaderOnRouteChange';
 
 const UserList: React.FC = () => {
   const [todos, setTodos] = useState<ToDoType[]>([]);
@@ -16,13 +19,16 @@ const UserList: React.FC = () => {
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const { setError } = useModal();
+  const { setListLoading } = useSkeleton();
 
   useCloseModalsOnRouteChange();
+  useEndSkeletonLoaderOnRouteChange();
   useSortTodos(setTodos, todos);
 
   useEffect(() => {
     const fetchAllTodos = async () => {
       try {
+        setListLoading(true);
         // Get user's lists
         const response = await axiosPrivate.get(`lists/user/${auth?.user_id}`);
         // Get all todos from lists
@@ -39,6 +45,8 @@ const UserList: React.FC = () => {
         setTodos(todosArr);
       } catch (error) {
         setError(setErrorModal(error));
+      } finally {
+        setListLoading(false);
       }
     };
     if (auth.user_id) fetchAllTodos();
@@ -49,9 +57,7 @@ const UserList: React.FC = () => {
       <AuthModal />
       <Nav />
       <main>
-        <div>
-          <ToDoList list_id={listId} todos={todos} setTodos={setTodos} />
-        </div>
+        <ToDoList list_id={listId} todos={todos} setTodos={setTodos} />
       </main>
     </div>
   );

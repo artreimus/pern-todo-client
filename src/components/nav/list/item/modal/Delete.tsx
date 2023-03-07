@@ -6,6 +6,7 @@ import useModal from '@/hooks/useModal';
 import setSuccessModal from '@/utils/setSuccessModal';
 import { ListType } from '../..';
 import { useRouter } from 'next/router';
+import useSkeleton from '@/hooks/useSkeleton';
 
 type ListItemModalDeleteProps = {
   setLists: (value: ListType[] | ((prev: ListType[]) => ListType[])) => void;
@@ -22,6 +23,8 @@ const ListItemModalDelete: React.FC<ListItemModalDeleteProps> = ({
 }) => {
   const { setError, setSuccess } = useModal();
 
+  const { setListLoading } = useSkeleton();
+
   const router = useRouter();
 
   const handleDelete = async () => {
@@ -30,6 +33,7 @@ const ListItemModalDelete: React.FC<ListItemModalDeleteProps> = ({
       setLists((prev) => prev.filter((list) => list.list_id !== list_id));
       setShow(false);
       setSuccess(setSuccessModal('Todo deleted'));
+      setListLoading(true);
       router.push('/lists');
     } catch (error) {
       setError(setErrorModal(error));

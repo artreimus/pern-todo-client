@@ -5,7 +5,9 @@ import ToDoList, { ToDoType } from '@/components/todo/list';
 import useAuth from '@/hooks/useAuth';
 import useAxiosPrivate from '@/hooks/useAxiosPrivate';
 import useCloseModalsOnRouteChange from '@/hooks/useCloseModalsOnRoute';
+import useEndSkeletonLoaderOnRouteChange from '@/hooks/useEndSkeletonLoaderOnRouteChange';
 import useModal from '@/hooks/useModal';
+import useSkeleton from '@/hooks/useSkeleton';
 import useSortTodos from '@/hooks/useSortTodos';
 import setErrorModal from '@/utils/setErrorModal';
 import React, { useEffect, useState } from 'react';
@@ -16,19 +18,25 @@ const List: React.FC = () => {
 
   const axiosPrivate = useAxiosPrivate();
   const { setError } = useModal();
+  const { setListLoading } = useSkeleton();
   const { auth } = useAuth();
 
   useCloseModalsOnRouteChange();
+  useEndSkeletonLoaderOnRouteChange();
+
   useSortTodos(setTodos, todos);
 
   useEffect(() => {
     const fetchListTodos = async () => {
       try {
+        setListLoading(true);
         const responseTodo = await axiosPrivate.get(`todos/this-week`);
         setTodos([...responseTodo.data.data]);
         setListId(responseTodo.data.defaultListId.list_id);
       } catch (error) {
         setError(setErrorModal(error));
+      } finally {
+        setListLoading(false);
       }
     };
     if (auth.user_id) fetchListTodos();
@@ -39,14 +47,12 @@ const List: React.FC = () => {
       <AuthModal />
       <Nav />
       <main>
-        <div>
-          <ToDoList
-            list_id={listId}
-            todos={todos}
-            setTodos={setTodos}
-            title={'My Day'}
-          />
-        </div>
+        <ToDoList
+          list_id={listId}
+          todos={todos}
+          setTodos={setTodos}
+          title={'My Day'}
+        />
       </main>
     </div>
   );

@@ -5,6 +5,8 @@ import useAxiosPrivate from '@/hooks/useAxiosPrivate';
 import useAuth from '@/hooks/useAuth';
 import NavListItem from './item';
 import useModal from '@/hooks/useModal';
+import useSkeleton from '@/hooks/useSkeleton';
+import SkeletonNavListItemLoader from '@/components/skeleton/NavListItemLoader';
 
 export type ListType = {
   user_id: string;
@@ -19,9 +21,12 @@ const NavList: React.FC = () => {
   const axiosPrivate = useAxiosPrivate();
   const { auth } = useAuth();
 
+  const { setNavLoading, navLoading } = useSkeleton();
+
   useEffect(() => {
     const getUserLists = async () => {
       try {
+        setNavLoading(true);
         const response = await axiosPrivate.get(`lists/user/${auth.user_id}`);
         setLists([
           ...response?.data.data.filter(
@@ -30,6 +35,8 @@ const NavList: React.FC = () => {
         ]);
       } catch (error) {
         setError(setError(error));
+      } finally {
+        setNavLoading(false);
       }
     };
     if (auth.user_id) getUserLists();
@@ -38,15 +45,21 @@ const NavList: React.FC = () => {
   return (
     <div className="w-full">
       <hr className={`${styles.divider} solid border-t-4 mb-3`} />
-      {lists.map((list) => (
-        <NavListItem
-          title={list.title}
-          key={list.list_id}
-          id={list.list_id}
-          setLists={setLists}
-        />
-      ))}
-      <NavListInput setLists={setLists} />
+      {navLoading ? (
+        <SkeletonNavListItemLoader />
+      ) : (
+        <>
+          {lists.map((list) => (
+            <NavListItem
+              title={list.title}
+              key={list.list_id}
+              id={list.list_id}
+              setLists={setLists}
+            />
+          ))}
+          <NavListInput setLists={setLists} />
+        </>
+      )}
     </div>
   );
 };
