@@ -21,7 +21,7 @@ const Nav: React.FC = () => {
     <nav
       className={`flex flex-col bg-white${inter.className} mb-2 sm:max-w-xs`}
     >
-      <div className="flex items-center justify-between px-5 pt-3 pb-2 sm:pt-6">
+      <div className="flex items-center justify-between px-5 pt-3 pb-2 sm:pt-6 text-5xl">
         <Link href="/">
           <Logo />
         </Link>

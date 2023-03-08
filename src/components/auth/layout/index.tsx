@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import useModal from '@/hooks/useModal';
 import setErrorModal from '@/utils/setErrorModal';
 import setSuccessModal from '@/utils/setSuccessModal';
+import useCloseModalsOnRouteChange from '@/hooks/useCloseModalsOnRoute';
 
 type TextInput = { email: string; password: string };
 
@@ -19,6 +20,8 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ title }) => {
     email: '',
     password: '',
   });
+
+  useCloseModalsOnRouteChange();
 
   const route =
     title === 'register'
@@ -89,7 +92,7 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ title }) => {
 
   return (
     <div className="h-screen">
-      <div className="mt-5 ml-5 justify-self-auto">
+      <div className="mt-5 ml-5 justify-self-auto text-5xl">
         <Link href="/">
           <Logo />
         </Link>

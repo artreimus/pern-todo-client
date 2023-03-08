@@ -21,6 +21,12 @@ module.exports = {
     minHeight: {
       '4/5': '75%',
     },
+    minWidth: {
+      110: '110px',
+    },
+    maxWidth: {
+      80: '83.33%',
+    },
   },
   plugins: [],
 };
