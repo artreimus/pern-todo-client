@@ -56,10 +56,12 @@ const Todo: React.FC<TodoProps & ToDoType> = ({
         checked={completed}
         onChange={handleCompletedChange}
       />
-      <label htmlFor={uniqid} className="text-md">
+      <label htmlFor={uniqid} className="text-md  ">
         <span className="custom-checkbox"></span>
-        {description}
       </label>
+      <p className="whitespace-nowrap text-ellipsis overflow-hidden w-10/12">
+        {description}
+      </p>
       {due_date && (
         <div className="text-xxs font-semibold absolute bottom-1 left-11  text-gray-500">
           {due_date}

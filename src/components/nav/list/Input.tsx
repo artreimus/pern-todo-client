@@ -16,7 +16,9 @@ const NavListInput: React.FC<NavListInputProps> = ({ setLists }) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     try {
+      if (!title) throw new Error('Please provide a title');
       const response = await axiosPrivate.post(
         'lists',
         JSON.stringify({ title })
@@ -40,6 +42,8 @@ const NavListInput: React.FC<NavListInputProps> = ({ setLists }) => {
             setTitle(e.target.value);
           }}
           className="h-5 py-6 pl-5 focus:outline-none w-11/12"
+          maxLength={18}
+          minLength={1}
         />
         <button className="text-xl absolute bottom-4 right-3" type="submit">
           <AiOutlinePlus />

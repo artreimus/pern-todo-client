@@ -14,10 +14,12 @@ const NavListItem: React.FC<NavListItemProps> = ({ title, id, setLists }) => {
     <div className="flex flex-row font-semibold text-lg items-center bg-emerald-300 mb-3">
       <NavListItemMenu id={id} setLists={setLists} title={title} />
       <Link
-        className="py-3 px-4 rounded-sm w-full flex items-center"
+        className="py-3 px-4 rounded-sm w-10/12 flex items-center"
         href={`/lists/${id}`}
       >
-        {title}
+        <p className="whitespace-nowrap text-ellipsis overflow-hidden">
+          {title}
+        </p>
       </Link>
     </div>
   );

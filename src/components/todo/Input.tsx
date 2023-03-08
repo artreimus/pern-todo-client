@@ -25,8 +25,8 @@ const ToDoInput: React.FC<ToDoInputProps> = ({ setTodos, list_id }) => {
     e.preventDefault();
 
     try {
-      if (!description || !list_id) {
-        throw new Error('Please provide all required fields');
+      if (!description) {
+        throw new Error('Please provide todo description');
       }
 
       const response = await axiosPrivate.post(
@@ -82,6 +82,8 @@ const ToDoInput: React.FC<ToDoInputProps> = ({ setTodos, list_id }) => {
               onChange={(e) => {
                 setDescription(e.target.value);
               }}
+              minLength={1}
+              maxLength={100}
               className="h-5 pt-1 pb-2 pl-3  w-full focus:outline-none bg-transparent"
             />
           </div>
