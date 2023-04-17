@@ -51,7 +51,7 @@ const ToDoModalDelete: React.FC<ToDoModalDeleteProps> = ({
               className="fixed inset-0 w-full h-full bg-black opacity-40"
               onClick={() => setShow(false)}
             ></div>
-            <div className="flex items-center min-h-4/5 px-4 py-8">
+            <div className="flex items-center min-h-4/5 px-4 py-8 max-w-[1000px] w-4/5 m-auto">
               <div className="relative w-full max-w-md p-4 mx-auto bg-white rounded-md shadow-lg">
                 <div className="sm:flex">
                   <div className="mt-2 w-full">

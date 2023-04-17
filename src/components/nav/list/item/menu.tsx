@@ -43,7 +43,7 @@ const NavListItemMenu: React.FC<NavListItemMenuProps> = ({
               className="fixed inset-0 w-full h-full"
               onClick={() => setShow(false)}
             ></div>
-            <div className="absolute left-5 top-5 z-10 mt-2 w-24 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+            <div className="absolute left-5 top-5 z-10 mt-2 w-24 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none py-2">
               <ListItemModalDelete
                 setLists={setLists}
                 setShow={setShowDelete}

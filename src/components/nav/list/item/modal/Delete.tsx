@@ -55,7 +55,7 @@ const ListItemModalDelete: React.FC<ListItemModalDeleteProps> = ({
               onClick={() => setShow(false)}
             ></div>
             <div className="flex items-center min-h-4/5 px-4 py-8">
-              <div className="relative w-full max-w-md p-4 mx-auto bg-white rounded-md shadow-lg">
+              <div className="relative w-full p-4 mx-auto bg-white rounded-md shadow-lg max-w-[1000px] w-4/5">
                 <div className="sm:flex">
                   <div className="mt-2 w-full">
                     <div className="md:flex items-center flex-col justify-center">

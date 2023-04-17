@@ -98,7 +98,7 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ title }) => {
         </Link>
       </div>
 
-      <div className="border-2 border-solid border-black rounded w-5/6 max-w-xl mx-auto my-20 py-5 px-10">
+      <div className="border-2 border-solid border-black rounded max-w-[1000px] w-5/6  mx-auto my-20 py-5 px-10">
         <h2 className="text-5xl font-semibold mb-5 text-center capitalize">
           {title ?? 'Form'}
         </h2>
